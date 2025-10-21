@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Credits - Sweet16 Adventure</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="credits-page">
+    <h1>Credits</h1>
+
+    <!-- Floating PIPI sprite -->
+    <img src="assets/pipi.png" alt="PIPI" class="pipi-floating">
+
+    <div class="credits-content">
+      <p><strong>Created by:</strong> Marcelina</p>
+      <p><strong>Programming:</strong> Marcelina </p>
+      <p><strong>Graphics & Sprites:</strong> Marcelina (Character from Google just edited)</p>
+      <p><strong>Animations:</strong> Marcelina</p>
+      <p><strong>Music & SFX:</strong> audio from "Undertale"</p>
+      <p><strong>Story & Dialogue:</strong> Marcelina </p>
+      <p><strong>Engine / Tools:</strong> HTML, CSS, JS</p>
+      <p><strong>Special Thanks:</strong> Chela (my coding tutor) for her guidance </p>
+      <p>© 2025 Marcelina. Every pixel & line of code made with ❤️</p>
+    </div>
+
+    <div class="extra-messages">
+      <p>“All bugs fixed with stress, tears and tantrums💖”</p>
+    </div>
+
+    <button onclick="goBack()">Back to Menu</button>
+
+    <!-- Floating sparkles -->
+    <div class="sparkle" style="--i:1;"></div>
+    <div class="sparkle" style="--i:2;"></div>
+    <div class="sparkle" style="--i:3;"></div>
+    <div class="sparkle" style="--i:4;"></div>
+    <div class="sparkle" style="--i:5;"></div>
+  </div>
+
+<script>
+function goBack() {
+  window.location.href = "index.html";
+}
+
+// Animate sparkles
+const sparkles = document.querySelectorAll('.sparkle');
+sparkles.forEach((sparkle, i) => {
+  sparkle.style.left = Math.random() * window.innerWidth + 'px';
+  sparkle.style.top = Math.random() * window.innerHeight + 'px';
+  sparkle.style.animationDelay = (i*0.5) + 's';
+});
+
+// Optional: add floating PIPI animation using JS if needed
+</script>
+</body>
+</html>
