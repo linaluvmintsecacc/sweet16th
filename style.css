@@ -1,0 +1,38 @@
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: url('assets/background.png') no-repeat center center;
+  background-size: cover;
+}
+
+.menu {
+  text-align: center;
+  padding-top: 100px;
+}
+
+.character {
+  width: 200px;
+  animation: float 2s infinite alternate;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-20px); }
+}
+
+button {
+  display: block;
+  margin: 10px auto;
+  padding: 15px 40px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 10px;
+  border: none;
+  background-color: #ff69b4;
+  color: white;
+  transition: transform 0.2s;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
