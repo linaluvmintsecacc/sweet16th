@@ -3,18 +3,186 @@
 <head>
 <meta charset="UTF-8">
 <title>Sweet16 Adventure</title>
-<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Caveat', cursive;
+  background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
+  height: 100vh;
+  overflow: hidden;
+  text-align: center;
+  color: #ff69b4;
+}
+
+.menu {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.menu h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 5px #ffb6c1;
+}
+
+.character {
+  width: 160px;
+  margin-bottom: 30px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+button {
+  display: block;
+  margin: 10px auto;
+  padding: 12px 30px;
+  font-size: 20px;
+  border: none;
+  border-radius: 12px;
+  background-color: #ff69b4;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #ffb6c1;
+}
+
+.credits-page {
+  display: none;
+  text-align: center;
+  padding-top: 40px;
+  color: #ff69b4;
+  background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.credits-content {
+  font-size: 22px;
+  margin: 20px auto;
+  width: 80%;
+  line-height: 1.8;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 0 25px rgba(255,105,180,0.5);
+}
+
+.extra-messages {
+  font-size: 20px;
+  margin-top: 15px;
+  color: #ff1493;
+  font-style: italic;
+}
+
+.pipi-floating {
+  width: 150px;
+  position: absolute;
+  top: 100px;
+  right: 50px;
+  animation: floatPipi 3s infinite alternate;
+}
+
+@keyframes floatPipi {
+  0% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
+  100% { transform: translateY(0) rotate(-5deg); }
+}
+
+/* ===== Sparkles ===== */
+.sparkle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #ff69b4;
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.2; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.3); }
+  100% { opacity: 0.2; transform: scale(0.5); }
+}
+
+.fade {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
 </head>
 <body>
-  <div class="menu">
-    <h1>Sweet16 Adventure</h1>
-    <img src="assets/pipi.png" alt="PIPI Character" class="character">
 
-    <button id="newGameBtn">New Game</button>
-    <button id="continueBtn">Continue</button>
-    <button id="creditsBtn">Credits</button>
+<div id="menu" class="menu fade">
+  <h1>Sweet16 Adventure</h1>
+  <img src="assets/pipi.png" alt="PIPI Character" class="character">
+  <button id="newGameBtn">New Game</button>
+  <button id="continueBtn">Continue</button>
+  <button id="creditsBtn">Credits</button>
+</div>
+
+<div id="credits" class="credits-page fade">
+  <h1>Credits</h1>
+  <img src="e65081ec6640c8c5a713d322552347b9.png" alt="." class="pipi-floating">
+  <div class="credits-content">
+    <p><strong>Created by:</strong> Marcelina</p>
+    <p><strong>Programming:</strong> Marcelina</p>
+    <p><strong>Graphics & Sprites:</strong> Marcelina (Character from Google just edited)</p>
+    <p><strong>Animations:</strong> Marcelina</p>
+    <p><strong>Music & SFX:</strong> audio from "Undertale"</p>
+    <p><strong>Story & Dialogue:</strong> Marcelina</p>
+    <p><strong>Engine / Tools:</strong> HTML, CSS, JS</p>
+    <p><strong>Special Thanks:</strong> Chela (my coding tutor) for her guidance</p>
+    <p>© 2025 Marcelina. Every pixel & line of code made with ❤️</p>
   </div>
+  <div class="extra-messages">
+    <p>“All bugs fixed with stress, tears and tantrums💖”</p>
+  </div>
+  <button onclick="goBack()">⬅ Back to Menu</button>
 
-<script src="game.js"></script>
+  <div class="sparkle" style="--i:1;"></div>
+  <div class="sparkle" style="--i:2;"></div>
+  <div class="sparkle" style="--i:3;"></div>
+  <div class="sparkle" style="--i:4;"></div>
+  <div class="sparkle" style="--i:5;"></div>
+</div>
+
+<script>
+const menu = document.getElementById('menu');
+const credits = document.getElementById('credits');
+document.getElementById('creditsBtn').addEventListener('click', () => {
+  menu.style.display = 'none';
+  credits.style.display = 'block';
+});
+function goBack() {
+  credits.style.display = 'none';
+  menu.style.display = 'block';
+}
+
+const sparkles = document.querySelectorAll('.sparkle');
+sparkles.forEach((sparkle, i) => {
+  sparkle.style.left = Math.random() * window.innerWidth + 'px';
+  sparkle.style.top = Math.random() * window.innerHeight + 'px';
+  sparkle.style.animationDelay = (i * 0.5) + 's';
+});
+</script>
+
 </body>
 </html>
