@@ -13,7 +13,7 @@ body {
   height: 100vh;
   overflow: hidden;
   text-align: center;
-  color: #ff69b4;
+  color: #d1005c; /* Improved contrast */
 }
 
 .menu {
@@ -51,6 +51,8 @@ button {
   color: white;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
 }
 
 button:hover {
@@ -58,11 +60,31 @@ button:hover {
   box-shadow: 0 0 15px #ffb6c1;
 }
 
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.5s;
+}
+
+button:hover::before {
+  left: 100%;
+}
+
 .credits-page {
   display: none;
   text-align: center;
   padding-top: 40px;
-  color: #ff69b4;
+  color: #d1005c; /* Improved contrast */
   background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
   height: 100vh;
   overflow: hidden;
@@ -101,7 +123,21 @@ button:hover {
   100% { transform: translateY(0) rotate(-5deg); }
 }
 
-/* ===== Sparkles ===== */
+/* Confetti Animation */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #ff69b4;
+  animation: fall 3s linear infinite;
+}
+
+@keyframes fall {
+  0% { transform: translateY(-100vh) rotate(0deg); }
+  100% { transform: translateY(100vh) rotate(360deg); }
+}
+
+/* Sparkles */
 .sparkle {
   position: absolute;
   width: 12px;
@@ -126,21 +162,29 @@ button:hover {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .menu h1 { font-size: 36px; }
+  .character { width: 120px; }
+  button { font-size: 18px; padding: 10px 20px; }
+  .credits-content { width: 90%; font-size: 18px; }
+}
 </style>
 </head>
 <body>
 
 <div id="menu" class="menu fade">
   <h1>Sweet16 Adventure</h1>
-  <img src="assets/pipi.png" alt="Character" class="character">
-  <button id="newGameBtn">New Game</button>
-  <button id="continueBtn">Continue</button>
-  <button id="creditsBtn">Credits</button>
+  <img src="assets/pipi.png" alt="Pink floating character" class="character" onerror="this.src='placeholder.png';">
+  <button id="newGameBtn" aria-label="Start a new game">New Game</button>
+  <button id="continueBtn" aria-label="Continue from last save" disabled>Continue</button>
+  <button id="creditsBtn" aria-label="View game credits">Credits</button>
 </div>
 
 <div id="credits" class="credits-page fade">
   <h1>Credits</h1>
-  <img src="e65081ec6640c8c5a713d322552347b9-removebg-preview.png" alt="." class="pipi-floating">
+  <img src="e65081ec6640c8c5a713d322552347b9-removebg-preview.png" alt="Floating pink character" class="pipi-floating" onerror="this.src='placeholder.png';">
   <div class="credits-content">
     <p><strong>Created by:</strong> Marcelina</p>
     <p><strong>Programming:</strong> Marcelina</p>
@@ -155,7 +199,7 @@ button:hover {
   <div class="extra-messages">
     <p>“All bugs fixed with stress, tears and tantrums💖”</p>
   </div>
-  <button onclick="goBack()">⬅ Back to Menu</button>
+  <button onclick="goBack()" aria-label="Go back to main menu">⬅ Back to Menu</button>
 
   <div class="sparkle" style="--i:1;"></div>
   <div class="sparkle" style="--i:2;"></div>
@@ -165,17 +209,70 @@ button:hover {
 </div>
 
 <script>
+// Audio context for click sounds
+let audioContext;
+function playClickSound() {
+  if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+  gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+  oscillator.start();
+  oscillator.stop(audioContext.currentTime + 0.1);
+}
+
+// Confetti function
+function createConfetti() {
+  for (let i = 0; i < 20; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + 'vw';
+    confetti.style.animationDelay = Math.random() * 2 + 's';
+    document.body.appendChild(confetti);
+    setTimeout(() => confetti.remove(), 3000);
+  }
+}
+
+// Menu navigation
 const menu = document.getElementById('menu');
 const credits = document.getElementById('credits');
-document.getElementById('creditsBtn').addEventListener('click', () => {
+const newGameBtn = document.getElementById('newGameBtn');
+const continueBtn = document.getElementById('continueBtn');
+const creditsBtn = document.getElementById('creditsBtn');
+
+// Check for saved progress
+if (localStorage.getItem('gameProgress')) {
+  continueBtn.disabled = false;
+}
+
+newGameBtn.addEventListener('click', () => {
+  playClickSound();
+  localStorage.setItem('gameProgress', 'level1'); // Example save
+  alert('Starting new game!'); // Replace with actual game start
+});
+
+continueBtn.addEventListener('click', () => {
+  playClickSound();
+  const progress = localStorage.getItem('gameProgress');
+  alert(`Continuing from ${progress}`); // Replace with actual load
+});
+
+creditsBtn.addEventListener('click', () => {
+  playClickSound();
+  createConfetti();
   menu.style.display = 'none';
   credits.style.display = 'block';
 });
+
 function goBack() {
+  playClickSound();
   credits.style.display = 'none';
   menu.style.display = 'block';
 }
 
+// Sparkles positioning
 const sparkles = document.querySelectorAll('.sparkle');
 sparkles.forEach((sparkle, i) => {
   sparkle.style.left = Math.random() * window.innerWidth + 'px';
@@ -186,5 +283,4 @@ sparkles.forEach((sparkle, i) => {
 
 </body>
 </html>
-
 
